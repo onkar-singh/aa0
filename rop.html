@@ -7,9 +7,9 @@
 <script src="localbase.min.js"></script>
 <script src="dexie.min.js"></script>
 <style>
-.content {max-width: 500px;margin: auto;/* background: #b0e0e6 */;}
+.content {max-width: 500px;margin: auto;/* background: #b0e0e6; */}
 #ptdli li{padding: 8px 5px;border-top: 0.5px solid;}
-#ptdli li input{float: left;top: 0;}
+#ptdli li input{float: left;top: 0;margin-right: 2px;}
 #ptdli li label:last-child{float: right;}
 </style>
 
@@ -69,14 +69,20 @@ d[1]=await st.collection(selg).doc(b).get();
 }
 
 // print selected order
+let nmold;
 async function printbill() { 
+window.frames[0].document.body.innerHTML=null;;
 
+let c=0;
 for (const i in selod5) {
+    c++;nmold='';
     let m=await getcd(i);
-    console.log(m);
-    bill(m);
+    console.log(c,i,m);
+    bill(c,m);
     document.getElementById(i).checked=false;
 }
+window.frames[0].print();
+zz('#ifm').style.display='none';
 selod5={};
 }
 
@@ -86,6 +92,7 @@ selod5={};
 <iframe height='1000' id='ifm' style='display: none;padding: 0;margin: 0;' width='100%'></iframe>
 <div id='tembill' style="display: none;">
     <style>
+        @media print {.pbreak {page-break-after: always;}}
         b {
           font-weight: 700;
         }
@@ -272,7 +279,7 @@ selod5={};
         text-decoration: inherit;
         }
     </style>    
-<div id='b1' style='margin: 0;padding: 0;font-family: sans-serif;'>
+<div id='b0' style='margin: 0;padding: 0;font-family: sans-serif;'>
 <div class='pdfTransactionHTMLView'>
 <table>
 <tbody>
@@ -475,29 +482,20 @@ selod5={};
 </div>
 <script>
     let bdoc=window.frames[0].document;
-    bdoc.head.innerHTML='<meta name="format-detection" content="telephone=no, email=no, address=no" />'
+    bdoc.head.innerHTML='<meta name="format-detection" content="telephone=no, email=no, address=no" />';
 let temp0=zz('#tembill style').cloneNode(true);bdoc.head.append(temp0);
-let temp1=zz('#tembill #b1').cloneNode(true);bdoc.body.append(temp1);
+let temp1=zz('#tembill #b0').cloneNode(true);bdoc.body.append(temp1);bdoc.body.style.margin='0';
 
-function bill(t){
-       let doc=bdoc;
+function bill(c,t){
         let p=t[1];
-        // let temp=zz('#tembill').content.cloneNode(true);
-        // let fbody=window.frames[0].document.body;
-
-        // bdoc.body.innerHTML+=`<div id='${'b'+i}' style='margin: 0;padding: 0;font-family: sans-serif;'></div>`;
-        // bdoc.querySelector('#b'+${i}).appendChild(document.querySelector('#tembill #b1 div').cloneNode(true));
-        // let doc=bdoc.querySelector('#b'+${i});
-    
-        bdoc.body.innerHTML=null;bdoc.body.style.margin='0';
-        bdoc.body.appendChild(document.querySelector('#tembill #b1').cloneNode(true));
-
+        bdoc.body.innerHTML+=`<div id='${'b'+c}' class='pbreak' style='margin: 0;padding: 0;font-family: sans-serif;'></div>`;
+        bdoc.querySelector('#b'+c).appendChild(document.querySelector('#tembill #b0 div').cloneNode(true));
+        let doc=bdoc.querySelector('#b'+c);
 
         zz('#ifm').style.display='';ct=0;qt=0;qtx=0;pcx=0;
-       
+
         let pt=t[0];
         let stgst=pt.gst.slice(0,2)+'-'+gststate[Number(pt.gst.slice(0,2))];let gst=pt.gst.toUpperCase();
-       // let dtx=new Date(p.dt).toLocaleDateString('en-GB').split('/').join('-');
           let gstz='';
           if(gst.length>3){gstz='gf';} 
 
@@ -514,11 +512,9 @@ let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoo
             if(t=='Bio'){
                 if(s<=42){
                     bio42+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][0];
-                    doc.querySelector('#'+t+'0')||apnd1(t+'0');
                    apnd(t,bio42,p.pc[t][0],i,0,w);
                 }else{
                     bio46+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][1];
-                    doc.querySelector('#'+t+'1')||apnd1(t+'1');
                    apnd(t,bio46,p.pc[t][1],i,1,w);
                 }
             }
@@ -527,63 +523,53 @@ let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoo
                 if(s<=42){
                     if(c=='White'){
                         whbio42+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*(p.pc[t][0]+15);
-                        doc.querySelector('#'+t+'wh2')||apnd1(t+'wh2');w='wh';
+                        w='wh';
                         apnd(t,whbio42,(p.pc[t][0]+15),i,2,w);
                     }else{
                         nbio42+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][0];
-                        doc.querySelector('#'+t+'0')||apnd1(t+'0');
                         apnd(t,nbio42,p.pc[t][0],i,0,w);
                     }
                     
                 }else{
                     if(c=='White'){
                         whbio46+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*(p.pc[t][1]+15);
-                        doc.querySelector('#'+t+'wh3')||apnd1(t+'wh3');w='wh';
+                        w='wh';
                         apnd(t,whbio46,(p.pc[t][1]+15),i,3,w);
                     }else{
                         nbio46+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][1];
-                        doc.querySelector('#'+t+'1')||apnd1(t+'1');
                         apnd(t,nbio46,p.pc[t][1],i,1,w);
                 }
             }
             } else if(t=='OverS'){
                 ows+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][0];
-                apnd1(t+'0');
                 apnd(t,ows,p.pc[t][0],i,0,w);
             } else if(t=='Kids'){
                 kid+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][0];
-                apnd1(t+'0');
                 apnd(t,kid,p.pc[t][0],i,0,w);
                 
             }else if(t=='Polo') {
                 if(s=='XXL'){
                     poloxl+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][1];
-                    doc.querySelector('#'+t+'1')||apnd1(t+'1');
                    apnd(t,poloxl,p.pc[t][1],i,1,w);
                 }else{
                     poloxxl+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][0];
-                    doc.querySelector('#'+t+'0')||apnd1(t+'0');
                    apnd(t,poloxxl,p.pc[t][0],i,0,w);
                 }
             } else if(t=='Hood'){
                 if(s=='XXL'){
                     hoodxl+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][1];
-                    doc.querySelector('#'+t+'1')||apnd1(t+'1');
                    apnd(t,hoodxl,p.pc[t][1],i,1,w);
                 }else{
                     hoodxxl+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][0];
-                    doc.querySelector('#'+t+'0')||apnd1(t+'0');
                    apnd(t,hoodxxl,p.pc[t][0],i,0,w);
                 }
                 
             } else if(t=='Sweat'){
                 if(s=='XXL'){
                     swxl+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][1];
-                    doc.querySelector('#'+t+'1')||apnd1(t+'1');
                    apnd(t,swxl,p.pc[t][1],i,1,w);
                 }else{
                     swxxl+=kk[t][c][s];qtx+=kk[t][c][s];pcx+=kk[t][c][s]*p.pc[t][0];
-                    doc.querySelector('#'+t+'0')||apnd1(t+'0');
                    apnd(t,swxxl,p.pc[t][0],i,0,w);
                 }
             }
@@ -591,12 +577,10 @@ let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoo
       });
     });
   }
-    
 }
-      savepd2(t[1].it);
+      // savepd2(t[1].it);
         
         let gstx='';
-
         if (t[1].tch) {
             doc.querySelector('#tch').innerHTML='&#8377;'+t[1].tch+'.00';
         } else {
@@ -608,25 +592,21 @@ let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoo
         } else {
             doc.querySelector('#och').parentNode.remove();
         }
+
         if (t[1].dis) {
              doc.querySelector('#dis').innerHTML='&#8377;'+t[1].dis+'.00';
         } else {
             doc.querySelector('#dis').parentNode.remove();
         }
 
-
         let cttq=0;let cttp=0;
         if (t[1].c) {
-           //  doc.querySelector('#dis').innerHTML='&#8377;'+all1[t].dis+'.00';
-          //  doc.querySelector("#ttqt").innerHTML=qtx;
           if(t[1].c[0]){
-          apnd1('c'+0);
-          apnd('c',t[1].c[1],t[1].c[0],0,0);
+          apnd('c',t[1].c[1],t[1].c[0],0,0,'');
           cttq+=t[1].c[1];cttp+=(t[1].c[1]*t[1].c[0]);
           }
          if(t[1].c[2]){
-          apnd1('c'+1);
-          apnd('c',t[1].c[3],t[1].c[2],0,1);
+          apnd('c',t[1].c[3],t[1].c[2],0,1,'');
           cttq+=t[1].c[3];
           cttp+=(t[1].c[2]*t[1].c[3]);
           }
@@ -655,12 +635,20 @@ let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoo
         
         let tttx=pcx+phx+t[1].tch+t[1].och-t[1].dis+cttp;
         doc.querySelector('#ttt').innerHTML='&#8377;'+Math.ceil(tttx).toLocaleString('en-IN')+'.00';
-        window.frames[0].print();
-        zz('#ifm').style.display='none';
-    
+
+        function apnd(v,qt,upc,j,y,z) {
+            if(nmold!=nm[v][y]){
+                doc.querySelector('#tbody').innerHTML+=`<tr id='${v+z+y}'></tr>`;
+                nmold=nm[v][y];
+                ct+=1;
+           }
+            let tpc=qt*upc;
+            doc.querySelector('#tbody #'+v+z+y).innerHTML=`<td>${ct}</td><td><p class='noPadding'>${nm[v][y]}</p></td><td>6109</td>
+            <td>${qt}</td><td><span>&#8377;${upc}</span></td><td class='theme10BorderColor'>&#8377;${tpc}.00</td>`;
+        }
 }
 
-let ct=0;let qtx=0;let pcx=0;
+let qtx=0;let pcx=0;let ct=0;
 let nm={Bio:['Biowash R-neck, 36"-42"','Biowash R-neck, 44"-46"'],
 NBio:['Cotton R-neck, 36"-42"','Cotton R-neck, 44"-46"','Cotton R-neck White, 36"-42"','Cotton R-neck White, 44"-46"'],
 Hood:['Non Zipper Hoodie, S-XL','Non Zipper Hoodie, XXL'],
@@ -669,18 +657,6 @@ Polo:['Polo neck, XS-XL','Polo neck, XXL'],
 Sweat:['Sweatshirt, S-XL','Sweatshirt, XXL'],
 Kids:['Kids R-neck, 20"-34"'],
 c:['Custom T-shirts','Custom Winter Wears']}
-
-function apnd(v,qt,upc,j,y,z) {
-let tpc=qt*upc;//qtx+=qt;pcx+=tpc;
-// console.log(v,z,y);
- zz('#ifm').contentDocument.querySelector('#tbody #'+v+z+y).innerHTML=`<td>${ct}</td><td><p class='noPadding'>${nm[v][y]}</p></td><td>6109</td>
-<td>${qt}</td><td><span>&#8377;${upc}</span></td><td class='theme10BorderColor'>&#8377;${tpc}.00</td>`;
-}
-
-function apnd1(v) {
-    ct+=1;
-    zz('#ifm').contentDocument.querySelector('#tbody').innerHTML+=`<tr id='${v}' name=''></tr>`;
-}
 
 let gststate={01:"Jammu And Kashmir",02:"Himachal Pradesh",03:"Punjab",04:"Chandigarh",05:"Uttarakhand",06:"Haryana",07:"Delhi",08:"Rajasthan",09:"Uttar Pradesh",10:"Bihar",11:"Sikkim",12:"Arunachal Pradesh",13:"Nagaland",14:"Manipur",15:"Mizoram",16:"Tripura",17:"Meghalaya",18:"Assam",19:"West Bengal",20:"Jharkhand",21:"Odisha",22:"Chattisgarh",23:"Madhya Pradesh",24:"Gujarat",26:"Dadra And Nagar Haveli And Daman And Diu",27:"Maharashtra",28:"Andhra Pradesh(old)",29:"Karnataka",30:"Goa",31:"Lakshadweep",32:"Kerala",33:"Tamil Nadu",34:"Puducherry",35:"Andaman And Nicobar Islands",36:"Telangana",37:"Andhra Pradesh",38:"Ladakh",97:"Other Territory",99:"Centre Jurisdiction"}
 </script>
