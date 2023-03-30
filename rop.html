@@ -44,7 +44,7 @@ function selod(h) {
 // onload get all(50) recent order
 let st = new Localbase('st');
 let htmlli='';
-st.collection('ods').orderBy('id', 'desc').limit(50).get().then(doc => {
+st.collection('ods').orderBy('id', 'desc').limit(100).get().then(doc => {
 
   for (let i = 0; i < doc.length; i++) {
    let li0=`<li>
