@@ -88,13 +88,13 @@ for (const i in selod5) {
     bill(c,m);
     document.getElementById(i).checked=false;
 }
-// let myWindow = window.open("", "_blank");let body1=myWindow.document.body;
-//     body1.setAttribute('onclick','print()');
-//     let tep0=zz('#tembill style').cloneNode(true);
-//     let tep=pk.body.cloneNode(true);body1.append(tep0,tep);
-//     myWindow.print();// myWindow.close();
+let myWindow = window.open("", "_blank");let body1=myWindow.document.body;
+    body1.setAttribute('onclick','print()');
+    let tep0=zz('#tembill style').cloneNode(true);
+    let tep=pk.body.cloneNode(true);body1.append(tep0,tep);
+    myWindow.print();// myWindow.close();
 
-window.frames[0].print();
+// window.frames[0].print();
 
 }else{alert('Select order first!!')}
 selod5={};
@@ -105,7 +105,7 @@ selod5={};
 <iframe height='1000' id='ifm' style='display: none;padding: 0;margin: 0;' width='100%'></iframe>
 <div id='tembill' style="display: none;">
     <style>
-       @page {size: auto;margin: 0;}
+       /* @page {size: auto;margin: 2em;} */
         @media print {.pbreak {page-break-after: always;}}
         b {
           font-weight: 700;
