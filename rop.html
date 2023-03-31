@@ -107,7 +107,8 @@ selod5={};
 <div id='tembill' style="display: none;">
     <style>
        /* @page {size: auto;margin: 2em;} */
-        @media print {.pbreak {page-break-after: always;}}
+        @page {-webkit-print-color-adjust: exact !important;color-adjust: exact !important;print-color-adjust: exact !important;          }
+        @media print {.pbreak {page-break-after: always;}body {-webkit-print-color-adjust: exact;}}
         b {
           font-weight: 700;
         }
