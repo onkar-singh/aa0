@@ -88,13 +88,14 @@ for (const i in selod5) {
     bill(c,m);
     document.getElementById(i).checked=false;
 }
+
+    if((navigator.platform)==='iPhone'){
 let myWindow = window.open("", "_blank");let body1=myWindow.document.body;
     body1.setAttribute('onclick','print()');
     let tep0=zz('#tembill style').cloneNode(true);
     let tep=pk.body.cloneNode(true);body1.append(tep0,tep);
-    myWindow.print(); myWindow.close();
-
-// window.frames[0].print();
+    myWindow.print();myWindow.close();
+  }else{window.frames[0].print();}
 
 }else{alert('Select order first!!')}
 selod5={};
