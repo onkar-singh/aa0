@@ -44,7 +44,7 @@ function selod(h) {
 // onload get all(50) recent order
 let st = new Localbase('st');
 let j=JSON.parse(localStorage.pin);
-    
+
 async function dddd() {
 let htmlli='';
 for (let i in j) {
@@ -77,8 +77,9 @@ d[1]=await st.collection(selg).doc(b).get();
 // print selected order
 let nmold;
 async function printbill() { 
-window.frames[0].document.body.innerHTML=null;;
-
+let pk=window.frames[0].document;
+pk.body.innerHTML=null;
+if(Object.keys(selod5).length != 0){
 let c=0;
 for (const i in selod5) {
     c++;nmold='';
@@ -87,7 +88,15 @@ for (const i in selod5) {
     bill(c,m);
     document.getElementById(i).checked=false;
 }
+// let myWindow = window.open("", "_blank");let body1=myWindow.document.body;
+//     body1.setAttribute('onclick','print()');
+//     let tep0=zz('#tembill style').cloneNode(true);
+//     let tep=pk.body.cloneNode(true);body1.append(tep0,tep);
+//     myWindow.print();// myWindow.close();
+
 window.frames[0].print();
+
+}else{alert('Select order first!!')}
 selod5={};
 }
 
@@ -96,6 +105,7 @@ selod5={};
 <iframe height='1000' id='ifm' style='display: none;padding: 0;margin: 0;' width='100%'></iframe>
 <div id='tembill' style="display: none;">
     <style>
+       @page {size: auto;margin: 2em;}
         @media print {.pbreak {page-break-after: always;}}
         b {
           font-weight: 700;
