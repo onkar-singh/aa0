@@ -22,7 +22,7 @@
       </div>
     <ul id="ptdli" class="w3-ul w3-hoverable">
         <li><input class="w3-check" type="checkbox">
-        <label>2125.Party Name</label>
+        <label>2125.cn</label>
         <label>50 ....... 25/03</label>
         </li>
     </ul>
@@ -43,19 +43,25 @@ function selod(h) {
 
 // onload get all(50) recent order
 let st = new Localbase('st');
-let htmlli='';
-st.collection('ods').orderBy('id', 'desc').limit(100).get().then(doc => {
 
-  for (let i = 0; i < doc.length; i++) {
-   let li0=`<li>
-            <input onclick="selod(this)" id="od${doc[i].id}" class="w3-check" type="checkbox">
-            <label for="od${doc[i].id}">${doc[i].id}.${doc[i].cn}</label>
-            <label for="od${doc[i].id}">${doc[i].tot} .... ${doc[i].dt.slice(0,6)}</label>
+async function dddd() {
+let j=JSON.parse(localStorage.pin);
+let htmlli='';
+for (let i in j) {
+ await st.collection('ods').doc(i).get().then(doc => {
+         console.log(i,doc);
+           let li0=`<li>
+            <input onclick="selod(this)" id="od${doc.id}" class="w3-check" type="checkbox">
+            <label for="od${doc.id}">${doc.id}.${doc.cn}</label>
+            <label for="od${doc.id}">${doc.tot} .... ${doc.dt.slice(0,6)}</label>
             </li>`;
-    htmlli+=li0;
-  }
-  document.getElementById('ptdli').innerHTML=htmlli;
-})
+    htmlli=li0+htmlli;
+});
+} 
+    document.getElementById('ptdli').innerHTML=htmlli;
+}
+
+dddd();
 
 
 async function getcd(b) { // b(order no.)='od12'
@@ -82,12 +88,10 @@ for (const i in selod5) {
     document.getElementById(i).checked=false;
 }
 window.frames[0].print();
-zz('#ifm').style.display='none';
 selod5={};
 }
 
 </script>
-
 
 <iframe height='1000' id='ifm' style='display: none;padding: 0;margin: 0;' width='100%'></iframe>
 <div id='tembill' style="display: none;">
@@ -483,27 +487,25 @@ selod5={};
 <script>
     let bdoc=window.frames[0].document;
     bdoc.head.innerHTML='<meta name="format-detection" content="telephone=no, email=no, address=no" />';
-let temp0=zz('#tembill style').cloneNode(true);bdoc.head.append(temp0);
-let temp1=zz('#tembill #b0').cloneNode(true);bdoc.body.append(temp1);bdoc.body.style.margin='0';
+    let temp0=zz('#tembill style').cloneNode(true);bdoc.head.append(temp0);
+    let temp1=zz('#tembill #b0').cloneNode(true);bdoc.body.append(temp1);bdoc.body.style.margin='0';
 
-function bill(c,t){
-        let p=t[1];
+    function bill(c,t){
+        let pt=t[0];let p=t[1];
         bdoc.body.innerHTML+=`<div id='${'b'+c}' class='pbreak' style='margin: 0;padding: 0;font-family: sans-serif;'></div>`;
         bdoc.querySelector('#b'+c).appendChild(document.querySelector('#tembill #b0 div').cloneNode(true));
         let doc=bdoc.querySelector('#b'+c);
 
-        zz('#ifm').style.display='';ct=0;qt=0;qtx=0;pcx=0;
-
-        let pt=t[0];
+        ct=0;qt=0;qtx=0;pcx=0;
         let stgst=pt.gst.slice(0,2)+'-'+gststate[Number(pt.gst.slice(0,2))];let gst=pt.gst.toUpperCase();
           let gstz='';
           if(gst.length>3){gstz='gf';} 
 
         doc.querySelector("#ptd").innerHTML=`<b style='font-size: 16px;'>${t[1].cn}</b>${pt.add&&('<br/>'+pt.add)}${pt.mn1&&('<br/>Contact No.: '+pt.mn1)}${pt.mn2&&(', '+pt.mn2)}${gstz&&('<br/>GSTIN Number: '+gst)}${gst&&('<br/>State: '+stgst)}`;
         doc.querySelector("#inno").innerHTML=`<p style='font-weight: 500;'>${gst&&('Place of Supply: '+stgst)}</p><p>Invoice No.: ${t[1].id}</p><p>Date: ${t[1].dt}</p>`;
-function savepd2(kk) {
-let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoodxl=0,hoodxxl=0,swxl=0,swxxl=0,ows=0,kid=0;
 
+function savepd2(kk) {
+  let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoodxl=0,hoodxxl=0,swxl=0,swxxl=0,ows=0,kid=0;
   if (!(Object.keys(kk).length === 0)) {
     Object.keys(kk).forEach(function (t) {
       Object.keys(kk[t]).forEach(function (c) {
@@ -631,7 +633,7 @@ let bio42=0,bio46=0,nbio42=0,nbio46=0,whbio42=0,whbio46=0,poloxl=0,poloxxl=0,hoo
         }
         doc.querySelector("#st").innerHTML=`&#8377;${cttp+pcx}.00`;
         doc.querySelector("#ttqt").innerHTML=qtx+cttq;
-		doc.querySelector("#ttpc").innerHTML=`&#8377;${pcx+cttp}.00`;
+        doc.querySelector("#ttpc").innerHTML=`&#8377;${pcx+cttp}.00`;
         
         let tttx=pcx+phx+t[1].tch+t[1].och-t[1].dis+cttp;
         doc.querySelector('#ttt').innerHTML='&#8377;'+Math.ceil(tttx).toLocaleString('en-IN')+'.00';
